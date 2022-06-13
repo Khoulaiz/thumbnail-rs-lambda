@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ThumbnailFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      MemorySize: 128
+      Architectures: ["arm64"]
+      Handler: bootstrap
+      Runtime: provided.al2
+      Timeout: 30
+      CodeUri: target/lambda/thumbnail-rs/
+      Policies:
+        - Statement:
+            - Sid: S3PoliciesThumbnail
+              Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: '*'
+
+Outputs:
+  FunctionName:
+    Value: !Ref ThumbnailFunction
+    Description: Name of the Thumbnail Lambda function
